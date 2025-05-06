@@ -1,10 +1,11 @@
 import { useStartDate } from "~/composables/useStartDate"
+import type { APOD } from "~/types/apod"
 
 export default defineEventHandler(async (event) => {
   const { NASA_API_KEY } = useRuntimeConfig()
   const timestamp = new Date().toISOString();
   
-  const data = await $fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&start_date=${useStartDate()}`)
+  const data: APOD = await $fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&start_date=${useStartDate()}`)
 
   console.log('New picture of the day from NASA successfully fetched!')
   
