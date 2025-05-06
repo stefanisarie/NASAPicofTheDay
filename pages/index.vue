@@ -3,6 +3,7 @@
 import type { ApodData, ApodsData } from "~/utils/types";
 const img = useImage();
 import { useColorMode } from "@vueuse/core";
+import { computed } from "vue";
 const mode = useColorMode({ initialValue: "dark" });
 
 // Make the call to the API
@@ -21,6 +22,10 @@ const handleCardClick = (apod: ApodData) => {
   selectedApod.value = apod;
   isModalOpen.value = true;
 };
+
+const mediaType = computed(() => {
+  return selectedApod?.value?.media_type === "video" ? "video" : "image";
+});
 
 // Function to close the modal
 const closeModal = () => {
@@ -95,7 +100,7 @@ useHead({
     <UModal
       v-model:open="isModalOpen"
       :title="selectedApod?.title"
-      :description="`NASA Image of the Day Details for ${selectedApod?.date}`"
+      :description="`NASA ${mediaType} of the day for ${selectedApod?.date} date`"
       :ui="{
         content: 'max-w-4xl',
         body: '!p-2',
@@ -128,7 +133,7 @@ useHead({
           <p class="mb-4">
             {{ selectedApod.explanation }}
             <span class="block text-xs opacity-35"
-              >({{ selectedApod.media_type === "video" ? "Video" : "Image" }} published on
+              >(<span class="capitalize">{{ mediaType }}</span> published on
               {{ selectedApod.date }})</span
             >
           </p>
@@ -142,7 +147,7 @@ useHead({
 
       <template #footer>
         <div class="flex justify-end">
-          <UButton color="secondary" variant="solid" @click="closeModal">Close</UButton>
+          <UButton variant="solid" @click="closeModal">Close</UButton>
         </div>
       </template>
     </UModal>
