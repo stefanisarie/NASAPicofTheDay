@@ -73,17 +73,17 @@ useHead({
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <PictureCard
-          v-for="(apod, index) in Object.values(apods).filter(
-            (item) => typeof item === 'object' && item.date
-          )"
-          :key="index"
+          v-for="(apod, index) in apods
+            ? Object.values(apods).filter((item): item is ApodData => typeof item === 'object' && 'date' in item)
+            : []"
+          :key="apod.date"
           :apod="apod"
           @click="handleCardClick"
         />
       </div>
 
       <p class="opacity-35 text-right text-sm">
-        Last fetch on {{ useFormatDate(apods.timestamp) }}.
+        Last fetch on {{ apods?.timestamp ? useFormatDate(apods.timestamp) : "N/A" }}.
       </p>
     </div>
 
@@ -117,7 +117,9 @@ useHead({
               format="webp"
               quality="60"
               loading="lazy"
-              :placeholder="img(selectedApod.hdurl, { h: 10, f: 'png', blur: 6, q: 50 })"
+              :placeholder="
+                img(selectedApod.hdurl || '', { h: 10, f: 'png', blur: 6, q: 50 })
+              "
               class="rounded-lg shadow-lg w-full"
             ></NuxtImg>
             <iframe

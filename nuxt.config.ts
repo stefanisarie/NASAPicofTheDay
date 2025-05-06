@@ -7,6 +7,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     NASA_API_KEY: process.env.NASA_API_KEY,
   },
+  typescript: {
+    typeCheck: true
+  },
   routeRules: {
     // NASA route cache for 12 hours
     '/api/apod':        { cache: { maxAge: 60 * (12 * 60) } },

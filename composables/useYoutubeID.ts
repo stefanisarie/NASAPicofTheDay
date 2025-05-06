@@ -1,4 +1,4 @@
-export const useYoutubeID = (youtubeurl) => {
+export const useYoutubeID = (youtubeurl: string) => {
   let youtubeID = youtubeurl.split('/embed/')[1];
   const questionMarkPosition = youtubeID.indexOf('?');
   if (questionMarkPosition !== -1) {
