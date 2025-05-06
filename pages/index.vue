@@ -127,8 +127,9 @@ useHead({
           <!-- Description -->
           <p class="mb-4">
             {{ selectedApod.explanation }}
-            <span class="text-xs opacity-35"
-              >(Image published on {{ selectedApod.date }})</span
+            <span class="block text-xs opacity-35"
+              >({{ selectedApod.media_type === "video" ? "Video" : "Image" }} published on
+              {{ selectedApod.date }})</span
             >
           </p>
 

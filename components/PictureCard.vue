@@ -19,6 +19,10 @@ const youtubePreviewImage = computed(() => {
   const youtubeID = useYoutubeID(props.apod.url);
   return `https://img.youtube.com/vi/${youtubeID}/mqdefault.jpg`;
 });
+
+const iconColor = computed(() => {
+  return props.apod.media_type === "video" ? "text-red-500" : "text-gray-500";
+});
 </script>
 
 <template>
@@ -39,10 +43,7 @@ const youtubePreviewImage = computed(() => {
                 : 'i-line-md-image-twotone'
             "
             size="24"
-            :class="{
-              'text-red-500': apod.media_type === 'video',
-              'text-gray-500': apod.media_type === 'image',
-            }"
+            :class="iconColor"
           />
         </div>
         <h1 class="font-bold">
