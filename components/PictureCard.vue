@@ -30,7 +30,25 @@ const youtubePreviewImage = computed(() => {
     }"
   >
     <template #header>
-      <h1 class="font-bold">{{ apod.title }}</h1>
+      <div class="flex space-x-2">
+        <div class="flex justify-center">
+          <UIcon
+            :name="
+              apod.media_type === 'video'
+                ? 'i-line-md-youtube-filled'
+                : 'i-line-md-image-twotone'
+            "
+            size="24"
+            :class="{
+              'text-red-500': apod.media_type === 'video',
+              'text-gray-500': apod.media_type === 'image',
+            }"
+          />
+        </div>
+        <h1 class="font-bold">
+          {{ apod.title }}
+        </h1>
+      </div>
     </template>
 
     <div class="flex items-center justify-center flex-grow">
