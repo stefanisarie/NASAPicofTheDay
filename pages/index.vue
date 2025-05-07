@@ -8,8 +8,11 @@ const mode = useColorMode({ initialValue: "dark" });
 // Make the call to the API
 const { data: apods, error, status } = useAsyncData<ApodsData>(
   "allapods",
-  () => $fetch("/api/apod"),
-  { server: false }
+  async () => {
+    // await useDelay(2500);
+    return $fetch("/api/apod");
+  }
+  // { server: false }
 );
 
 // Selected APOD for modal
@@ -61,13 +64,13 @@ const displayApods = computed(() => {
 <template>
   <UContainer class="max-w-7xl mx-auto py-6 px-3 sm:px-5 md:px-8 xl:px-0">
     <!-- Loading indicator -->
-    <UAlert
-      v-if="status === 'idle' || status === 'pending'"
-      color="primary"
-      title="Loading!"
-      description="We're fetching the latest images from NASA."
-      icon="i-line-md-loading-twotone-loop"
-    />
+    <div v-if="status === 'pending'" class="flex space-x-2">
+      <UIcon
+        name="i-line-md-loading-twotone-loop"
+        class="text-2xl animate-spin text-gray-500"
+      />
+      <span>Loading last 9 days images/videos of the day from NASA...</span>
+    </div>
 
     <!-- Image of the day successfully fetched -->
     <div

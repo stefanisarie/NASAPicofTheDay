@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Create a delay utility function
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 // Use useAsyncData with a 3-second delay
 interface User {
   id: number;
@@ -30,8 +27,8 @@ interface User {
 const { data: users, status, error } = useLazyAsyncData<User[]>(
   "users",
   async () => {
-    // Wait for 3 seconds
-    await delay(1000);
+    // Wait for 1 second
+    await useDelay(1000);
     // Then fetch the data
     return $fetch<User[]>("https://jsonplaceholder.typicode.com/users");
   },
