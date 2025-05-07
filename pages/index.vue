@@ -3,7 +3,6 @@
 import type { ApodData, ApodsData } from "~/utils/types";
 const img = useImage();
 import { useColorMode } from "@vueuse/core";
-import { computed } from "vue";
 const mode = useColorMode({ initialValue: "dark" });
 
 // Make the call to the API
@@ -42,6 +41,21 @@ useHead({
     },
   ],
 });
+
+const displayApods = computed(() => {
+  // This handles cases where currentApods is null, undefined, or not a plain object
+  // (as implied by your original use of Object.values()).
+  // It returns an empty array, similar to your original ternary operator's else branch.
+  if (!apods.value || typeof apods.value !== "object" || Array.isArray(apods.value)) {
+    return [];
+  }
+
+  // This type predicate ensures that only valid ApodData objects are included.
+  return Object.values(apods.value).filter(
+    (item): item is ApodData =>
+      typeof item === "object" && item !== null && "date" in item
+  );
+});
 </script>
 
 <template>
@@ -61,7 +75,16 @@ useHead({
       v-if="status === 'success'"
     >
       <!-- Theme toggle -->
-      <div class="flex justify-end">
+      <div class="flex justify-between items-center space-x-4">
+        <div class="flex items-center space-x-2">
+          <NuxtLink to="/users" aria-label="Users" class="text-xl font-bold"
+            >Users</NuxtLink
+          >
+          <UIcon
+            name="i-material-symbols-keyboard-backspace-rounded"
+            class="text-2xl rotate-180"
+          />
+        </div>
         <UButton
           :icon="mode === 'dark' ? 'i-lucide-moon' : 'i-lucide-sun'"
           color="primary"
@@ -73,9 +96,7 @@ useHead({
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <PictureCard
-          v-for="(apod, index) in apods
-            ? Object.values(apods).filter((item): item is ApodData => typeof item === 'object' && 'date' in item)
-            : []"
+          v-for="apod in displayApods"
           :key="apod.date"
           :apod="apod"
           @click="handleCardClick"
